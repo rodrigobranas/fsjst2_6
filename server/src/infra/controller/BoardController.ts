@@ -31,6 +31,26 @@ export default class BoardController {
 			return columns;
 		});
 
+		http.route("get", "/boards/:idBoard/columns/:idColumn", async function (params: any, body: any) {
+			const columnRepository = new ColumnRepositoryDatabase(connection);
+			const columnService = new ColumnService(columnRepository);
+			const column = await columnService.getColumn(parseInt(params.idColumn));
+			return column;
+		});
+
+		http.route("post", "/boards/:idBoard/columns", async function (params: any, body: any) {
+			const columnRepository = new ColumnRepositoryDatabase(connection);
+			const columnService = new ColumnService(columnRepository);
+			const idColumn = await columnService.saveColumn(body);
+			return idColumn;
+		});
+
+		http.route("delete", "/boards/:idBoard/columns/:idColumn", async function (params: any, body: any) {
+			const columnRepository = new ColumnRepositoryDatabase(connection);
+			const columnService = new ColumnService(columnRepository);
+			await columnService.deleteColumn(parseInt(params.idColumn));
+		});
+
 		http.route("get", "/boards/:idBoard/columns/:idColumn/cards", async function (params: any, body: any) {
 			const cardRepository = new CardRepositoryDatabase(connection);
 			const cardService = new CardService(cardRepository);
