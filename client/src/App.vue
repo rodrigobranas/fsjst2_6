@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import BoardView from './views/BoardView.vue';
 </script>
 
 <template>
-	<router-view></router-view>
+	<BoardView></BoardView>
 </template>
 
 <style scoped>
