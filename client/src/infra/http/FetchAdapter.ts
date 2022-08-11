@@ -16,4 +16,19 @@ export default class FetchAdapter implements HttpClient {
 		return response.json();
 	}
 
+	async put(url: string, data: any): Promise<any> {
+		const response = await fetch(url, { 
+			method: "put", 
+			headers: { "content-type": "application/json"}, 
+			body: JSON.stringify(data)
+		});
+		return response.json();
+	}
+
+	async delete(url: string): Promise<any> {
+		await fetch(url, { 
+			method: "delete"
+		});
+	}
+
 }

@@ -5,6 +5,7 @@ defineProps(["board", "column"]);
 
 <template>
 	<div class="column">
+		<span @click="board.deleteColumn(column.idColumn)">delete</span>
 		<h3>{{ column.name }} <span class="estimative">{{ column.getEstimative() }}</span></h3>
 		<div v-for="card in column.cards">
 			<CardComponent :board="board" :column="column" :card="card"></CardComponent>

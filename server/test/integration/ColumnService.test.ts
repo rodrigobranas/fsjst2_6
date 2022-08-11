@@ -16,7 +16,7 @@ test("Deve salvar uma coluna", async function () {
 	const connection = new PgPromiseConnection();
 	const columnRepository = new ColumnRepositoryDatabase(connection);
 	const columnService = new ColumnService(columnRepository);
-	const idColumn = await columnService.saveColumn(new Column(1, 1, "Todo", true));
+	const idColumn = await columnService.saveColumn({ idBoard: 1, name: "Todo", hasEstimative: true });
 	const column = await columnService.getColumn(idColumn);
 	expect(column.name).toBe("Todo")
 	await columnService.deleteColumn(idColumn);

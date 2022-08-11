@@ -2,8 +2,8 @@
 </script>
 
 <template>
-	<router-view></router-view>
+	Boards
 </template>
 
-<style scoped>
+<style>
 </style>

@@ -1,3 +1,4 @@
+import Board from "../domain/entity/Board";
 import BoardRepository from "../domain/repository/BoardRepository";
 import CardRepository from "../domain/repository/CardRepository";
 import ColumnRepository from "../domain/repository/ColumnRepository";
@@ -7,7 +8,7 @@ export default class BoardService {
 	constructor (readonly boardRepository: BoardRepository, readonly columnRepository: ColumnRepository, readonly cardRepository: CardRepository) {
 	}
 
-	async getBoards (): Promise<{ idBoard: number, name: string }[]> {
+	async getBoards (): Promise<{ idBoard?: number, name: string }[]> {
 		const boards = await this.boardRepository.findAll();
 		return boards.map((board) => ({ idBoard: board.idBoard, name: board.name }));
 	}
@@ -23,6 +24,7 @@ export default class BoardService {
 		const columns = await this.columnRepository.findAllByIdBoard(idBoard);
 		for (const column of columns) {
 			const columnOutput: ColumnOutput = { idColumn: column.idColumn, name: column.name, hasEstimative: column.hasEstimative, estimative: 0, cards: []};
+			if (!column.idColumn) continue;
 			const cards = await this.cardRepository.findAllByIdColumn(column.idColumn);
 			for (const card of cards) {
 				columnOutput.estimative += card.estimative;
@@ -34,28 +36,33 @@ export default class BoardService {
 		return output;
 	}
 
-	async saveBoard (): Promise<void> {
-
+	async saveBoard (name: string): Promise<number> {
+		return this.boardRepository.save(new Board(undefined, name));
 	}
 
-	async updateBoard (): Promise<void> {
+	async updateBoard (idBoard: number, name: string): Promise<void> {
+		await this.boardRepository.update(new Board(idBoard, name));
+	}
+
+	async deleteBoard (idBoard: number): Promise<void> {
+		await this.boardRepository.delete(idBoard);
 	}
 }
 
 type ColumnOutput = {
-	idColumn: number,
+	idColumn?: number,
 	name: string, 
 	estimative: number, 
 	hasEstimative: boolean, 
 	cards: { 
-		idCard: number,
+		idCard?: number,
 		title: string, 
 		estimative: number
 	}[] 
 }
 
 type BoardOutput = {
-	idBoard: number,
+	idBoard?: number,
 	name: string,
 	estimative: number,
 	columns: ColumnOutput[]

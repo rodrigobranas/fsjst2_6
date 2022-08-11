@@ -12,12 +12,17 @@ export default class ColumnService {
 	}
 
 	async saveColumn (input: SaveInput): Promise<number> {
-		const idColumn = await this.columnRepository.save(new Column(input.idBoard, 1, input.name, input.hasEstimative));
+		const idColumn = await this.columnRepository.save(new Column(input.idBoard, undefined, input.name, input.hasEstimative));
 		return idColumn;
 	}
 
 	async getColumn (idColumn: number): Promise<Column> {
 		return this.columnRepository.get(idColumn);
+	}
+
+	async updateColumn (input: UpdateInput): Promise<void> {
+		const column = new Column(input.idBoard, input.idColumn, input.name, input.hasEstimative)
+		await this.columnRepository.update(column);
 	}
 
 	async deleteColumn (idColumn: number): Promise<void> {
@@ -27,6 +32,13 @@ export default class ColumnService {
 
 type SaveInput = {
 	idBoard: number,
+	name: string,
+	hasEstimative: boolean
+}
+
+type UpdateInput = {
+	idBoard: number,
+	idColumn: number,
 	name: string,
 	hasEstimative: boolean
 }
