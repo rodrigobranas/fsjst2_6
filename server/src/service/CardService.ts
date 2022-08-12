@@ -6,9 +6,18 @@ export default class CardService {
 	constructor (readonly cardRepository: CardRepository) {
 	}
 
+	async list (title: string) {
+		return this.cardRepository.list(title);
+	}
+
 	async getCards (idColumn: number) {
 		const cards = await this.cardRepository.findAllByIdColumn(idColumn);
 		return cards;
+	}
+
+	async getCard (idCard: number) {
+		const card = await this.cardRepository.get(idCard);
+		return card;
 	}
 
 	async saveCard (input: SaveInput): Promise<number> {

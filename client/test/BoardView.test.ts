@@ -12,7 +12,7 @@ function sleep (ms: number) {
 	})
 }
 
-test("Deve testar o board view", async function () {
+test.skip("Deve testar o board view", async function () {
 	const boardService: BoardService = {
 		async getBoard(idBoard: number) {
 			const board = new Board(1, "Projeto 1");

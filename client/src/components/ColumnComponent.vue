@@ -4,9 +4,10 @@ defineProps(["board", "column"]);
 </script>
 
 <template>
-	<div class="column">
-		<span @click="board.deleteColumn(column.idColumn)">delete</span>
+	<div class="column" @dragover="board.moveCard(column)">
 		<h3>{{ column.name }} <span class="estimative">{{ column.getEstimative() }}</span></h3>
+		<button @click="board.deleteColumn(column.idColumn)">delete</button>
+		<hr/>
 		<div v-for="card in column.cards">
 			<CardComponent :board="board" :column="column" :card="card"></CardComponent>
 		</div>
@@ -21,5 +22,6 @@ defineProps(["board", "column"]);
 	margin-right: 5px;
 	padding: 10px;
 	border: 1px solid #000;
+	min-height: 500px;
 }
 </style>

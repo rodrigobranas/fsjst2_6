@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import BoardView from './views/BoardView.vue';
+import NavComponent from './components/NavComponent.vue';
 </script>
 
 <template>
-	<BoardView></BoardView>
+	<nav-component></nav-component>
+	<router-view></router-view>
 </template>
 
 <style scoped>

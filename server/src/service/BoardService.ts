@@ -13,6 +13,11 @@ export default class BoardService {
 		return boards.map((board) => ({ idBoard: board.idBoard, name: board.name }));
 	}
 
+	async getBoardByIdBoard (idBoard: number): Promise<{ idBoard?: number, name: string }> {
+		const board = await this.boardRepository.get(idBoard);
+		return board;
+	}
+
 	async getBoard (idBoard: number): Promise<BoardOutput> {
 		const board = await this.boardRepository.get(idBoard);
 		const output: BoardOutput = {
@@ -29,7 +34,7 @@ export default class BoardService {
 			for (const card of cards) {
 				columnOutput.estimative += card.estimative;
 				output.estimative += card.estimative;
-				columnOutput.cards.push({ idCard: card.idCard, title: card.title, estimative: card.estimative });
+				columnOutput.cards.push({ idCard: card.idCard, title: card.title, estimative: card.estimative, color: card.color });
 			}
 			output.columns.push(columnOutput);
 		}
@@ -47,6 +52,15 @@ export default class BoardService {
 	async deleteBoard (idBoard: number): Promise<void> {
 		await this.boardRepository.delete(idBoard);
 	}
+
+	async updatePositionMap (input: { [idColumn: number]: number[] }): Promise<void> {
+		for (const idColumn in input) {
+			let index = 0;
+			for (const idCard of input[idColumn]) {
+				await this.cardRepository.updateIdColumnAndIndex(idCard, parseInt(idColumn), index++);
+			}
+		}
+	}
 }
 
 type ColumnOutput = {
@@ -57,7 +71,8 @@ type ColumnOutput = {
 	cards: { 
 		idCard?: number,
 		title: string, 
-		estimative: number
+		estimative: number,
+		color: string
 	}[] 
 }
 

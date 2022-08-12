@@ -13,6 +13,20 @@ export default class ExpressAdapter implements Http {
 			res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
 			next();
 		});
+		this.app.use(function (req: any, res: any, next: any) {
+			if (req.method === "OPTIONS") return next();
+			if (req.url === "/login") return next();
+			const authorization = req.headers["authorization"];
+			console.log(authorization);
+			if (authorization) {
+				const token = authorization.replace("Bearer ", "");
+				console.log(token);
+				if (token === "123456") {
+					return next();
+				}
+			}
+			return res.status(401).end();
+		});
 	}
 
 	route(method: string, url: string, callback: Function): void {
